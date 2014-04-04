@@ -32,6 +32,8 @@ class TestGui{
 	*/
 	const LOGNAME = 'unittest';
 
+	protected $errors = array();
+
 	protected static
 		/**
 		*  directory only from which tests will be loaded - production, testing, development
@@ -136,7 +138,7 @@ class TestGui{
 	/**
 	* Include all files necessary to run tests (Simpletest environment)
 	*/
-	public static function loadIncludes(){
+	protected static function loadIncludes(){
 		require_once( DIR_FRAMEWORK . 'web_tester.php');
 		require_once( DIR_FRAMEWORK . 'unit_tester.php');
 	}
@@ -144,7 +146,7 @@ class TestGui{
 	/**
 	* Return generated HTML output (results of executed tests and listing of available tests)
 	*/
-	public static function getOutput(){
+	public function getOutput(){
 		ob_start();
 		require(dirname(__FILE__) .DS. USE_TEMPLATE);
 		return ob_get_clean();
@@ -153,7 +155,7 @@ class TestGui{
 	/**
 	* Return currently used database adapter name/alias
 	*/
-	public static function getDatabaseName(){
+	protected static function getDatabaseName(){
 		/**
 		// example - Yii framework
 		$db = Yii::app()->db;
@@ -165,7 +167,7 @@ class TestGui{
 	/**
 	* Return the name of current user
 	*/
-	public static function getUserName(){
+	protected static function getUserName(){
 		/*
 		// Example - Yii framework
 		return Yii::app()->user->id;
@@ -181,7 +183,7 @@ class TestGui{
 	/**
 	* Return application name
 	*/
-	public static function getAppName(){
+	protected static function getAppName(){
 		return 'My Test Gui';
 		// return Yii::app()->name;
 	}
@@ -248,7 +250,7 @@ class TestGui{
 	* It will include sequencally all files from directory DIR_TESTS and collect all newly registered classes.
 	* !! This approach will not work if a file has been included previously - it will not recognize its class as newly registered.
 	*/
-	protected static function getAvailableTests(){
+	public static function getAvailableTests(){
 		if(!is_array(self::$tests) || !count(self::$tests)){
 			$files = TestUtils::findFilesRecursive(self::$directoryTests, array('addDirs' => false, 'fileTypes' => array('php')));
 			$tests = array();
@@ -303,7 +305,7 @@ class TestGui{
 				if(is_array($methods)){
 					$selected_tests[$test_case] = array_keys($methods);
 				}else{
-					echo '<div class="alert alert-error"><button data-dismiss="alert" class="close" type="button">×</button>Caution - TestCase "'.$test_case.'" has no selected unit test.</div>';
+					$this->errors[] = '<div class="alert alert-error">Caution - TestCase "'.$test_case.'" has no selected unit test.</div>';
 				}
 			}
 
