@@ -12,19 +12,10 @@ class TestUtils{
 		LEVEL_ERROR = 'error';
 
 	/**
-	* vrati link pre stiahnutie snapshot file
-	*/
-	/*
-	public static function getRequestUri(){
-		return Yii::app()->createUrl('admin/test');
-	}
-	*/
-
-	/**
-	* Prekonvertuje text na cielovy character set
+	* Covert characterset
 	* @param string $text
-	* @param string $from Kodovanie, v ktorom bezi testovana webstranka, napr. iso-8859-2
-	* @param string $to Kodovanie, v ktorom vracia odpovede selenium server (utf-8)
+	* @param string $from Characterset of tested web page
+	* @param string $to Characterset of selenium responses (utf-8)
 	*/
 	public static function convert($text, $from = CHARSET_SERVER, $to = CHARSET_WEB){
 		if(strcasecmp($from, $to)!==0 ){
@@ -124,7 +115,6 @@ class TestUtils{
 		if($label==''){
 			$label = $basename;
 		}
-//		$url = self::getRequestUri().'?snapshot='.base64_encode($basename);
 		$url = self::getUrlDownload($file);
 		return '<div class="test-snapshot-link">
 					&raquo; <a href="'.$url.'" target="_blank" class="snapshot">'.$label.'</a> &nbsp;
@@ -133,8 +123,8 @@ class TestUtils{
 	}
 
 	/**
-	* Zobrazi ulozeny snapshot z unit testu
-	* @param string $token URL token obsahujuci zakodovany nazov suboru, ktory musi existovat v TEMP directory.
+	* Show snapshot taken from previous unit test run
+	* @param string $token URL token containing encoded filename, that must exist in TEMP directory.
 	*/
 	public static function downloadSnapshot($token){
 		$path = base64_decode($token);
@@ -252,7 +242,6 @@ class TestUtils{
 	* Return current microtime
 	*/
 	public static function utime(){
-		//return array_sum(explode(' ', microtime()));	// old compatability PHP4
 		return microtime(true);
 	}
 
@@ -343,23 +332,6 @@ class TestUtils{
 	}
 
 	/**
-	* Write log, add time and auto-detect severity, if empty
-	* @param string $message log message
-	* @param string $file Abs. path to write to.
-	* @param string $severity info|error|warning or leave empty for auto detection.
-	*/
-	public static function log($message, $file, $severity = ''){
-		if(!$severity){
-			$severity = preg_match('/(error|fail|caution)/i', $message) ? self::LEVEL_ERROR : self::LEVEL_INFO;
-		}
-		$message = "\n[".date('d.m.Y H:i:s').'] ['.$severity.'] '.$message;
-		$path = DIR_LOG . $file;
-		if(!error_log($message, 3, $path)){
-			exit('Failed writing unit test log into ['.$file.']. Message: '.htmlspecialchars($message));
-		}
-	}
-
-	/**
 	* Return true if file should be included in returned list
 	* @param mixed $base
 	* @param mixed $file
@@ -393,45 +365,20 @@ class TestUtils{
 	}
 
 	/**
-	* Return static HTML header
+	* Write log, add time and auto-detect severity, if empty
+	* @param string $message log message
+	* @param string $file Abs. path to write to.
+	* @param string $severity info|error|warning or leave empty for auto detection.
 	*/
-	public static function getOutputHeader(){
-		// optional header - adjust if needed
-		return;
-		/*
-		return <<< HEADER
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
-<html>
-<head>
-	<link rel="stylesheet" type="text/css" href="/public/styles/portalbase.css" />
-	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-2" />
-</head>
-<body>
-HEADER;
-*/
-	}
-
-	/**
-	* Return static HTML footer
-	*/
-	public static function getOutputFooter(){
-		// optional footer - adjust if needed
-		return;
-		/*
-		return <<< FOOTER
-</body>
-</html>
-FOOTER;
-*/
-	}
-
-	/**
-	* Return page title
-	*/
-	public static function getOutputTitle(){
-		// optional title - adjust if needed
-		return '';
-		//return '<h1 align="center">UNIT TESTS @ '.$_SERVER['SERVER_NAME'].' (MY PORTAL)</h1>';
+	public static function log($message, $file, $severity = ''){
+		if(!$severity){
+			$severity = preg_match('/(error|fail|caution)/i', $message) ? self::LEVEL_ERROR : self::LEVEL_INFO;
+		}
+		$message = "\n[".date('d.m.Y H:i:s').'] ['.$severity.'] '.$message;
+		$path = DIR_LOG . $file . '.log';
+		if(!error_log($message, 3, $path)){
+			exit('Failed writing unit test log into ['.$file.']. Message: '.htmlspecialchars($message));
+		}
 	}
 
 }

@@ -145,13 +145,9 @@ class TestGui{
 	* Return generated HTML output (results of executed tests and listing of available tests)
 	*/
 	public static function getOutput(){
-		return '<div id="tests">'.
-			TestUtils::getOutputHeader()
-			. TestUtils::getOutputTitle()
-			. '<div class="span3 pull-left alert alert-info">'.self::$output_list_tests.'</div>'
-			. '<div class="span9 pull-right">'.self::$output_result_tests.'</div>'
-			. TestUtils::getOutputFooter()
-			.'</div>';
+		ob_start();
+		require(dirname(__FILE__) .DS. USE_TEMPLATE);
+		return ob_get_clean();
 	}
 
 	/**

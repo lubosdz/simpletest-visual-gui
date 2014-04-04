@@ -24,6 +24,8 @@ class TestController
 		define('DIR_LOG', $root.'/log/');
 		// root directory with simplement and extensions
 		define('DIR_FRAMEWORK', $root.'/gui/vendor/simpletest/');
+		// the name of the template to be used for rendering HTML output
+		define('USE_TEMPLATE', 'simpleTemplate.php');
 
 		// initiate GUI
 		require( $root. '/gui/TestGui.php' );
