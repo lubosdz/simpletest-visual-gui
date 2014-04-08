@@ -58,7 +58,7 @@ Therefore it does not provide any authentication mechanism - it is assumed, that
 The built in SimpleBrowser is sufficient for testing static pages, but it cannot handle/process javascript events.
 For this purpose, you need to use selenium server only.
 
-Steps for runnung Selenium Server via SimpleTest Visual GUI:
+Steps for running Selenium Server via SimpleTest Visual GUI:
 
 1. download selenium server from http://docs.seleniumhq.org/download/
 2. place it into some separate directory, e.g. /selenium/
