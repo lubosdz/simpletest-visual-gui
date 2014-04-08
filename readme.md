@@ -55,16 +55,16 @@ Therefore it does not provide any authentication mechanism - it is assumed, that
 		
 ## Running Selenium Server
 
-The built in SimpleBrowser is sufficient to static pages, but it cannot handle/process javascript events.
+The built in SimpleBrowser is sufficient for testing static pages, but it cannot handle/process javascript events.
 For this purpose, you need to use selenium server only.
 
-Steps:
+Steps for runnung Selenium Server via SimpleTest Visual GUI:
 
 1. download selenium server from http://docs.seleniumhq.org/download/
 2. place it into some separate directory, e.g. /selenium/
 3. if needed, create logging subdirectory, e.g. /selenium/log/
 4. install java. Ensure, that java is visible in your command line - in CLI window write "java -version" to see, that java is accessible. If not, add path to java bin directory (e.g. "c:\Program Files\Java\jre7\bin\") to your system environmental variable "PATH".
-5. create file /selenium/start-selenium-server.bat with following content:
+5. create file /selenium/**start-selenium-server.bat** with following content:
 ~~~
 java -jar d:\projects\selenium\selenium-server-standalone-2.41.0.jar -log ./log/selenium.log -trustAllSSLCertificates
 (adjust path to *.jar file)
