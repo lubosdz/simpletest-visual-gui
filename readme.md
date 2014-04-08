@@ -6,6 +6,8 @@ Release date: 08.04.2014
 This is simple customizable visual user interface for running unit tests written for simpletest unit testing framework.
 It provides simple friendly listing of available unit tests and displays test results.
 
+![Simpletest Visual GUI](screenshot-simpletest-gui.png "Simpletest Visual GUI - output example")
+
 ## Installation
 
 Unzip into your application's apropriate place, e.g. under subdirectory "extensions" or "vendor".
