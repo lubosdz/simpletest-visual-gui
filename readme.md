@@ -1,9 +1,9 @@
 # Simpletest Visual GUI
 
-Version: 1.0.0
-Release date: 08.04.2014
+* Version: 1.0.0
+* Release date: 08.04.2014
 
-This is simple customizable visual user interface for running unit tests written for simpletest unit testing framework.
+This is simple customizable visual user interface for running unit tests written for [SimpleTest](http://simpletest.org/) unit testing framework.
 It provides simple friendly listing of available unit tests and displays test results.
 
 ![Simpletest Visual GUI](screenshot-simpletest-gui.png "Simpletest Visual GUI - output example")
