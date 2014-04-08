@@ -1,7 +1,7 @@
-PHPWebdriver 
+PHPWebdriver 0.9.1
+http://code.google.com/p/php-webdriver-bindings/
 
 This is library for writing functional Selenium 2 Webdriver tests in Php.
 It works using JsonWireProtocol to comunicate with Selenium server.
-
 
 To see how it works see test directory.

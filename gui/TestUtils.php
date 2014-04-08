@@ -1,7 +1,7 @@
 <?php
 /**
 * Static utilities for running unitTests within portal
-* $Id: TestUtils.php 366 2013-11-30 13:39:53Z admin $
+* $Id$
 */
 class TestUtils{
 
@@ -59,15 +59,11 @@ class TestUtils{
 	* Store fetched $html into file in temporary directory.
 	* @param string $string The string to be saved
 	* @param string $label URL link label
-	* @param bool $returnLink If true, link is only returned, otherwise directly sent to output buffer
-	* @param bool $enabled If false, disable this function
+	* @param bool $return If true, link is only returned, otherwise directly sent to output buffer
 	* @param string $filename Optional filename into which $string will be saved
 	* @return string URL link
 	*/
-	public static function snapshot($string, $label='snapshot', $returnLink = false, $enabled=true, $filename = ''){
-		if(!$enabled){
-			return false;
-		}
+	public static function snapshot($string, $label='snapshot', $return = false, $filename = ''){
 		$trace = debug_backtrace();
 		if($label == 'snapshot' && isset($trace[1])){
 			$function = isset($trace[1]['function']) ? $trace[1]['function'] : '';
@@ -80,12 +76,12 @@ class TestUtils{
 			$filename = 'test_'.str_replace('.','_',$_SERVER['SERVER_NAME']).'_'.$secs.'_'.(intval($msecs*1000,3)).'.html';
 		}
 		$savePath = DIR_TEMP . $filename;
-		if(!file_put_contents($savePath, $string)){
+		if(false === file_put_contents($savePath, $string)){
 			exit('Failed saving file into ['.$savePath.']');
 		}
 		// return URL link for download snapshot
 		$url = self::getSnapshotUrl($savePath, $label);
-		if($returnLink){
+		if($return){
 			return $url;
 		}
 		echo $url;
@@ -98,7 +94,10 @@ class TestUtils{
 	* @return string
 	*/
 	public static function getUrlDownload($filepath){
-		return Yii::app()->createUrl('admin/test', array('snapshot' => base64_encode($filepath)));
+		// Adjust download link signature as needed.
+		// e.g. for Yii framework it might be URL link to TestController inside Administration module like so:
+		// return Yii::app()->createUrl('/administration/test', array('snapshot' => base64_encode($filepath)));
+		return '?snapshot='.base64_encode($filepath);
 	}
 
 	/**
@@ -116,10 +115,10 @@ class TestUtils{
 			$label = $basename;
 		}
 		$url = self::getUrlDownload($file);
-		return '<div class="test-snapshot-link">
-					&raquo; <a href="'.$url.'" target="_blank" class="snapshot">'.$label.'</a> &nbsp;
-					[<a href="'.$url.'&download=1" target="_blank">Download</a>]
-				</div>';
+		return '<div class="test-snapshot-link">'
+					.'&raquo; <a href="'.$url.'" target="_blank" class="snapshot">'.$label.'</a> &nbsp;'
+					.'[<a href="'.$url.'&download=1" target="_blank">Download</a>]'
+				.'</div>';
 	}
 
 	/**

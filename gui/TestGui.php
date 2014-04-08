@@ -8,18 +8,22 @@
 // set alias for DIRECTORY_SEPARATOR
 defined("DS") or define('DS', DIRECTORY_SEPARATOR);
 
+// layout template for rendering output GUI
+defined("USE_TEMPLATE") or define('USE_TEMPLATE', 'template1.php');
+
 // define some unique number for prepending into saved filenames from HTTP client (easier for orientation)
 defined('SEED') or define("SEED", time());
 
 // load utilities from unit tests
-require_once( dirname(__FILE__) .DS. 'TestUtils.php');
+require_once(dirname(__FILE__) .DS. 'TestUtils.php');
 
+// start timestamp for unit tests
 defined('TIMESTART') or define("TIMESTART", TestUtils::utime());
 
 // charset for converting via utility function TestUtils::convert()
 defined('CHARSET_WEB') or define ('CHARSET_WEB', 'utf-8');
 
-// charset in which selenium returns response
+// charset in which selenium server returns responses
 defined('CHARSET_SERVER') or define ('CHARSET_SERVER', 'utf-8');
 
 /**
@@ -103,9 +107,11 @@ class TestGui{
 	* @return bool False, if executing unit tests is not allowed. Set the directory from which unit tests will be loaded.
 	*/
 	public static function isEnabled(){
-		// load application configuration - uncomment or adjust your needs
+
+		// load application configuration specific for current environment - uncomment or adjust to suit your needs
 		//$conf = App::params('unittest');
 		$conf = array('enabled' => 1, 'directory' => 'development');
+
 		if(empty($conf['enabled'])){
 			// tests must be explicitly enabled
 			return false;
@@ -139,8 +145,9 @@ class TestGui{
 	* Include all files necessary to run tests (Simpletest environment)
 	*/
 	protected static function loadIncludes(){
-		require_once( DIR_FRAMEWORK . 'web_tester.php');
-		require_once( DIR_FRAMEWORK . 'unit_tester.php');
+		require_once(DIR_FRAMEWORK . 'web_tester.php');
+		require_once(DIR_FRAMEWORK . 'unit_tester.php');
+		require_once(dirname(__FILE__) .DS. 'SeleniumTestCase.php');
 	}
 
 	/**
@@ -184,7 +191,7 @@ class TestGui{
 	* Return application name
 	*/
 	protected static function getAppName(){
-		return 'My Test Gui';
+		return 'My Simpletest Gui';
 		// return Yii::app()->name;
 	}
 
@@ -197,7 +204,7 @@ class TestGui{
 		$tests = self::getAvailableTests();
 		if(count($tests)){
 			$title = '<input id="toggelAllUnittests" type="checkbox"/> '
-					.'<label for="toggelAllUnittests" title="Toggle all tests" style="display:inline-block;padding-top:0px;">  TESTS - '.self::getAppName().'</label><br/>'
+					.'<label for="toggelAllUnittests" title="Toggle all tests" style="display:inline-block;padding-top:0px;"> ALL TESTS - '.self::getAppName().'</label><br/>'
 					.'<label>@ <strong>'.$_SERVER['SERVER_NAME'].' / '.basename(self::$directoryTests).'</strong></label>';
 			$subTitle = 'DB: '.self::getDatabaseName();
 

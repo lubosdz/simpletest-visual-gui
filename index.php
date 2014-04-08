@@ -5,9 +5,16 @@
 * It is not real controller, only a fake one to demonstrate how it should be correctly implemented.
 */
 
+// handle special request for loading JQuery (checkboxes handling)
+if(isset($_GET['jquery'])){
+	// we avoid URL detection which is always a trouble on various setups
+	// we also won't load from CDN since internet acess may not always be an option
+	header('content-type: text/javascript');
+	exit(file_get_contents(dirname(__FILE__).DIRECTORY_SEPARATOR.'jquery.min.js'));
+}
+
 class TestController
 {
-
 	/**
 	* This is fake controller class for routing simpletest HTTP request
 	*/
@@ -16,16 +23,16 @@ class TestController
 		$root = dirname(__FILE__);
 
 		// define directories:
-		// directroy with all tests for all environments
+		// absolute path to directory root with all tests for all environments
 		define('DIR_TESTS', $root.'/tests/');
-		// temporary writable directroy
+		// absolute path to temporary writable directory
 		define('DIR_TEMP', $root.'/temp/');
-		// writable directory for loggin
+		// absolute path to writable directory for logs
 		define('DIR_LOG', $root.'/log/');
-		// root directory with simplement and extensions
+		// root directory with simpletest and the extensions
 		define('DIR_FRAMEWORK', $root.'/gui/vendor/simpletest/');
 		// the name of the template to be used for rendering HTML output
-		define('USE_TEMPLATE', 'simpleTemplate.php');
+		//define('USE_TEMPLATE', 'myTemplate.php');
 
 		// initiate GUI
 		require( $root. '/gui/TestGui.php' );
@@ -34,10 +41,10 @@ class TestController
 		$snapshot = isset($_GET['snapshot']) ? $_GET['snapshot'] : false;
 
 		if(!empty($snapshot)){
-			// download snapshot
+			// yes, download snapshot
 			TestUtils::downloadSnapshot($snapshot);
 		}else{
-			// render SimpleTest GUI
+			// execute tests and/or render SimpleTest GUI
 			echo TestGui::getInstance()
 				->runSelectedTests()
 				->listTests()

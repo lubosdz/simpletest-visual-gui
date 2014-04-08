@@ -1,9 +1,11 @@
 <?php
-
+/**
+* $Id$
+* Renders HTML output with test results
+*/
 class SimpleHtmlReporter extends SimpleReporter {
 	/**
 	* @var array Associative array with keys being names of test cases and values being arrays with method names
-	* @example
 	*/
 	private $tests = array();
 
@@ -41,7 +43,6 @@ class SimpleHtmlReporter extends SimpleReporter {
 
 	/**
 	* Sets which test cases and methods shoud be run
-	*
 	* @param array List of test cases and their methods
 	*/
 	public function setTests(array $tests) {
@@ -50,17 +51,16 @@ class SimpleHtmlReporter extends SimpleReporter {
 
 	/**
 	* Check if called method should be invoked (is in methods list) and then proceed with parents implementation
-	*
 	* @param string test case
 	* @param string method
 	* @return boolean TRUE if method should be invoked
 	*/
 	public function shouldInvoke($test_case, $method) {
-		if (sizeof($this->tests) > 0) {
+		if (count($this->tests) > 0) {
 			if (!array_key_exists($test_case, $this->tests)) {
 				return false;
 			}
-			if (sizeof($this->tests[$test_case]) > 0 && !in_array($method, $this->tests[$test_case])) {
+			if (count($this->tests[$test_case]) > 0 && !in_array($method, $this->tests[$test_case])) {
 				return false;
 			}
 		}
@@ -69,17 +69,14 @@ class SimpleHtmlReporter extends SimpleReporter {
 
 	/**
 	* Returns output
-	*
 	* @return string Output
 	*/
 	public function getOutput() {
-		return $this->generateOutput(); // TODO
-		// return $this->out;
+		return $this->generateOutput();
 	}
 
 	/**
 	* Generate output from results
-	*
 	* @return string Output
 	*/
 	private function generateOutput() {
@@ -88,7 +85,7 @@ class SimpleHtmlReporter extends SimpleReporter {
 
 		$test_count = 0;
 		foreach($this->results as $test_case) {
-			$test_count += sizeof($test_case['methods']);
+			$test_count += count($test_case['methods']);
 		}
 
 		$totals = array(
@@ -106,7 +103,7 @@ class SimpleHtmlReporter extends SimpleReporter {
 				$passed = (sizeof($method['fails']) + sizeof($method['exceptions']) + sizeof($method['errors']) == 0 ? true : false);
 				$out .= sprintf('<div class="%s">', ($passed ? 'passed' : 'failed'));
 				$out .= sprintf(
-					'<table><tr><th>%s</th><td>Time: %.3f s</td><td>Mem: %.3f MB</td><td>Passes: %d</td><td>Fails: %d</td><td>Exceptions: %d</td><td>Errors: %d</td></tr></table>',
+					'<table class="table-test-result"><tr><th>%s</th><td>Time: %.3f s</td><td>Mem: %.3f MB</td><td>Passes: %d</td><td>Fails: %d</td><td>Exceptions: %d</td><td>Errors: %d</td></tr></table>',
 					$name, $method['time'], ($method['memory'] / 1024 / 1024), sizeof($method['passes']), sizeof($method['fails']), sizeof($method['exceptions']), sizeof($method['errors'])
 				);
 				if (strlen($method['buffer']) > 0) {
@@ -137,7 +134,7 @@ class SimpleHtmlReporter extends SimpleReporter {
 	}
 
 	private function getCss() {
-$out = '<style type="text/css">
+return '<style type="text/css">
 h2 { margin-bottom: 7px; }
 .failed, .passed, .summary { margin-bottom: 7px; }
 .failed table  { background: red;     color: white; border: 4px solid red; }
@@ -148,18 +145,16 @@ h2 { margin-bottom: 7px; }
 .failed .buffer { background: #ffdddd; }
 .passed .buffer { background: #ddffdd; }
 th { padding: 0 5px; text-align: left; font-size: 1.2em; font-weight: normal; }
-td { padding: 0 5px; border-left: 1px solid white; width: 80px; }
+td { padding: 0 5px; border-left: 1px solid white; width: 80px; font-size: 1em; }
 td:nth-child(2) { width: 100px; }
 td:nth-child(3) { width: 120px; }
 td:nth-child(6) { width: 100px; }
 </style>
 ';
-		return $out;
 	}
 
 	/**
 	* return status for each test case
-	*
 	* @return array
 	*/
 	public function getStatus() {
@@ -171,7 +166,7 @@ td:nth-child(6) { width: 100px; }
 			foreach ($test_case['methods'] as $method) {
 				$total++;
 				if ($this->isPassed($method)) {
-					$passed++;
+					++$passed;
 				} else {
 					$m = array_merge($method['fails'], $method['exceptions'], $method['errors']);
 				}
@@ -189,7 +184,6 @@ td:nth-child(6) { width: 100px; }
 
 	/**
 	* return true if method doesnt have fails/exceptions/errors
-	*
 	* @param array $method
 	* @return boolean TRUE if wihout errors
 	*/
@@ -199,6 +193,7 @@ td:nth-child(6) { width: 100px; }
 
 
 	/* OUTPUT FUNCTIONS */
+
 	public function paintCaseStart($test_case) {
 		parent::paintCaseStart($test_case);
 		$this->results[] = array('name' => $test_case, 'methods' => array());
@@ -261,6 +256,5 @@ td:nth-child(6) { width: 100px; }
 		parent::paintPass($message);
 		$this->method_status['passes'][] = $message;
 	}
-
 
 }
