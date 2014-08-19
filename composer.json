@@ -1,5 +1,5 @@
 {
-	"name": "simpletest/simpletest-visual-gui",
+	"name": "lubosdz/simpletest-visual-gui",
 	"description": "Visual GUI interface for running tests written for Simpletest unit testing framework. Includes complete framework environment with improved web driver bindings for Selenium standalone server.",
 	"keywords": ["simpletest","unittest","visual interface gui"],
 	"homepage": "https://github.com/lubosdz/simpletest-visual-gui",
